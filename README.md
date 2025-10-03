@@ -21,7 +21,7 @@ The team collaborates to clean data, visualize results, train the model, and cre
 
 ## Folder Structure
 
-```text
+```
 project-name/
 ├── .github/             # GitHub settings (CODEOWNERS)
 ├── data/
@@ -41,7 +41,7 @@ project-name/
 │   └── slides/          # Final presentation materials
 ├── requirements.txt     # Python dependencies
 └── README.md
-
+```
 ---
 
 ## Team Roles & Responsibilities
@@ -83,4 +83,5 @@ python src/train.py
 python src/predict.py
 
 5.Presentation folder fully for presentaion maker
+
 
