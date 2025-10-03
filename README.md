@@ -21,24 +21,25 @@ The team collaborates to clean data, visualize results, train the model, and cre
 
 ## Folder Structure
 
+```text
 project-name/
-├── .github/ # GitHub settings (CODEOWNERS)
-├── Data/
-│ ├── raw/ # Original dataset
-│ └── processed/ # Cleaned dataset ready for modeling
-├── src/ # Python scripts
-│ ├── data_cleaning.py # Dataset cleaning functions
-│ ├── visualization.py # Functions to generate plots/graphs
-│ ├── train.py # Training script for RoBERTa
-│ ├── evaluate.py # Model evaluation
-│ └── predict.py # Make predictions with trained model
+├── .github/             # GitHub settings (CODEOWNERS)
+├── data/
+│   ├── raw/             # Original dataset
+│   └── processed/       # Cleaned dataset ready for modeling
+├── src/                 # Python scripts
+│   ├── data_cleaning.py # Dataset cleaning functions
+│   ├── visualization.py # Functions to generate plots/graphs
+│   ├── train.py         # Training script for RoBERTa
+│   ├── evaluate.py      # Model evaluation
+│   └── predict.py       # Make predictions with trained model
 ├── results/
-│ ├── figures/ # Plots and charts
-│ ├── metrics/ # Model metrics
-│ └── models/ # Saved models
+│   ├── figures/         # Plots and charts
+│   ├── metrics/         # Model metrics
+│   └── models/          # Saved models
 ├── presentation/
-│ └── slides/ # Final presentation materials
-├── requirements.txt # Python dependencies
+│   └── slides/          # Final presentation materials
+├── requirements.txt     # Python dependencies
 └── README.md
 
 ---
@@ -82,3 +83,4 @@ python src/train.py
 python src/predict.py
 
 5.Presentation folder fully for presentaion maker
+
