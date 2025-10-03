@@ -9,13 +9,7 @@ __pycache__/
 venv/
 .env/
 
-# Data
-data/raw/*
-!data/raw/.gitkeep
-data/processed/*
-!data/processed/.gitkeep
-
-# Models & results
-#results/models/*
-#results/figures/*
-#results/metrics/*
+# Models & results (ignore generated outputs)
+results/models/
+results/figures/
+results/metrics/
