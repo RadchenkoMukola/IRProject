@@ -16,6 +16,6 @@ data/processed/*
 !data/processed/.gitkeep
 
 # Models & results
-results/models/*
-results/figures/*
-results/metrics/*
+#results/models/*
+#results/figures/*
+#results/metrics/*
