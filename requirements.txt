@@ -1,6 +1,13 @@
+trafilatura
+async-timeout
+aiohttp
+tqdm
+requests
+newspaper3k
 torch
 transformers
 pandas
 scikit-learn
 matplotlib
 seaborn
+numpy

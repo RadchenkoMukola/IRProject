@@ -19,6 +19,49 @@ from transformers import (
     TrainingArguments,
     EarlyStoppingCallback,
 )
+
+import threading
+import torch.nn as nn
+
+_old_train = nn.Module.train
+_reentrant = threading.local()
+
+def _safe_train(self, mode: bool = True):
+    # re-entrancy guard: if we are already inside safe_train for this thread,
+    # call the original implementation directly to avoid recursion.
+    if getattr(_reentrant, "in_safe_train", False):
+        return _old_train(self, mode)
+
+    _reentrant.in_safe_train = True
+    try:
+        try:
+            # first attempt: normal call
+            return _old_train(self, mode)
+        except NameError as ne:
+            # original closure bug: missing __class__ in closure
+            if "__class__" in str(ne):
+                try:
+                    # ensure the class binding exists
+                    self.__class__ = type(self)
+                except Exception:
+                    # if we can't set it, still try calling old_train again
+                    pass
+                return _old_train(self, mode)
+            raise
+        except SystemError:
+            # C-level error path (some PyTorch internals can raise SystemError).
+            # Try to rebind class and retry once.
+            try:
+                self.__class__ = type(self)
+            except Exception:
+                pass
+            return _old_train(self, mode)
+    finally:
+        _reentrant.in_safe_train = False
+
+# Apply the monkey-patch
+nn.Module.train = _safe_train
+
 from transformers.trainer_utils import get_last_checkpoint
 from sklearn.model_selection import train_test_split
 from sklearn.utils.class_weight import compute_class_weight
