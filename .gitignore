@@ -11,5 +11,3 @@ venv/
 
 # Models & results (ignore generated outputs)
 results/models/
-results/figures/
-results/metrics/
