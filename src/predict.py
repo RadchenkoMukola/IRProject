@@ -16,9 +16,9 @@ os.chdir("..")
 hf_logging.set_verbosity_error()  # quiet HF warnings
 
 # === CONFIGURATION (edit these) ===
-MODEL_DIR = "./results/models/best_BERT_model"   # <--- your local model folder
-INPUT_CSV = "./Data/processed/News_Category_Dataset_v3_cleaned.csv"
-OUTPUT_CSV = "./Data/processed/News_Category_Dataset_v3_predicted.csv"
+MODEL_DIR = "./results/models/best_BERT_model_merged"   # <--- your local model folder
+INPUT_CSV = "./Data/processed/News_Category_Dataset_v3_merged.csv"
+OUTPUT_CSV = "./Data/processed/News_Category_Dataset_v3_predicted_merged.csv"
 TEXT_COL = "news_text"
 BATCH_SIZE = 64
 MAX_LENGTH = 256

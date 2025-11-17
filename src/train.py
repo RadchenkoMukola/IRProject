@@ -88,19 +88,29 @@ gc.collect()
 # ----------------------------
 # Load dataset
 # ----------------------------
-DATA_PATH = "Data/processed/News_Category_Dataset_v3_cleaned.csv"
+DATA_PATH = "Data/processed/News_Category_Dataset_v3_merged.csv"
 df = pd.read_csv(DATA_PATH, dtype={"news_text": str, "category": str}, low_memory=False)
-df = df.dropna(subset=["news_text", "category"])
+df = df.dropna(subset=["news_text", "category_merged"])
 
 le = LabelEncoder()
-df["label"] = le.fit_transform(df["category"])
+df["label"] = le.fit_transform(df["category_merged"])
 texts = df["news_text"].astype(str).tolist()
 labels = df["label"].tolist()
 num_labels = df["label"].nunique()
 
+
+# ----------------------------
+# Check loaded classes
+# ----------------------------
+print(f"Number of unique classes loaded: {num_labels}")
+print("Class mapping (encoded label -> category):")
+for idx, class_name in enumerate(le.classes_):
+    print(f"{idx}: {class_name}")
+
 train_texts, val_texts, train_labels, val_labels = train_test_split(
     texts, labels, test_size=0.1, random_state=42, stratify=labels
 )
+
 
 # ----------------------------
 # Tokenizer: USE THE FAST TOKENIZER
@@ -254,9 +264,9 @@ def safe_chunked_tokenize(
 
 
 # Tokenize train & val (safe)
-train_encodings = safe_chunked_tokenize(train_texts, tokenizer, MAX_LENGTH, "bert_train_cache_fast.pkl",
+train_encodings = safe_chunked_tokenize(train_texts, tokenizer, MAX_LENGTH, "bert_train_cache_merged.pkl",
                                         chunk_size=1000)
-val_encodings = safe_chunked_tokenize(val_texts, tokenizer, MAX_LENGTH, "bert_val_cache_fast.pkl", chunk_size=1000)
+val_encodings = safe_chunked_tokenize(val_texts, tokenizer, MAX_LENGTH, "bert_val_cache_merged.pkl", chunk_size=1000)
 
 
 # ----------------------------

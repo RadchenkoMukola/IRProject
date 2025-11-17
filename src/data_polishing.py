@@ -1,7 +1,10 @@
 import pandas as pd
+import os
 
+os.chdir("..")  # move to project root
 # Paths
 CLEANED_CSV = "Data/processed/News_Category_Dataset_v3_cleaned.csv"
+MERGED_CSV = "Data/processed/News_Category_Dataset_v3_merged.csv"
 ORIGINAL_CSV = "Data/raw/News_Category_Dataset_v3.csv"
 
 # Load datasets
@@ -17,29 +20,11 @@ print(f"Original dataset rows: {len(df_original)}")
 # -------------------
 # Count NaN rows per column
 # -------------------
-cleaned_nan_counts = df_cleaned.isna().sum()
-original_nan_counts = df_original.isna().sum()
-
 print("\nNaN counts per column (cleaned):")
-print(cleaned_nan_counts)
+print(df_cleaned.isna().sum())
 
 print("\nNaN counts per column (original):")
-print(original_nan_counts)
-
-# -------------------
-# Compare specific columns
-# -------------------
-if 'news_text' in df_cleaned.columns:
-    cleaned_empty_news = df_cleaned['news_text'].isna().sum()
-    print(f"\nEmpty 'news_text' rows in cleaned: {cleaned_empty_news}")
-
-if 'short_description' in df_original.columns:
-    original_empty_short_desc = df_original['short_description'].isna().sum()
-    print(f"Empty 'short_description' rows in original: {original_empty_short_desc}")
-
-if 'headline' in df_cleaned.columns:
-    cleaned_empty_headline = df_cleaned['headline'].isna().sum()
-    print(f"Empty 'headline' rows in cleaned: {cleaned_empty_headline}")
+print(df_original.isna().sum())
 
 # -------------------
 # Remove rows with NaN in 'news_text' or 'headline'
@@ -52,8 +37,95 @@ print(f"\nRows removed due to NaN in 'news_text' or 'headline': {before_removal 
 print(f"Remaining rows in cleaned dataset: {after_removal}")
 
 # -------------------
-# Save updated cleaned dataset
+# Merge categories into 15 classes
 # -------------------
-df_cleaned.to_csv(CLEANED_CSV, index=False)
-print(f"Updated cleaned dataset saved to: {CLEANED_CSV}")
+merge_map = {
+    # POLITICS
+    'POLITICS': 'POLITICS',
 
+    # Positive / Health / Misc
+    'POSITIVE/HEALTH': 'POSITIVE/HEALTH',
+    'GOOD NEWS': 'POSITIVE/HEALTH',
+    'IMPACT': 'POSITIVE/HEALTH',
+    'HEALTHY LIVING': 'POSITIVE/HEALTH',
+    'WELLNESS': 'POSITIVE/HEALTH',
+    'WEIRD NEWS': 'POSITIVE/HEALTH',
+
+    # Entertainment & Arts
+    'ENTERTAINMENT': 'ENTERTAINMENT',
+    'COMEDY': 'ENTERTAINMENT',
+    'ARTS': 'ENTERTAINMENT',
+    'ARTS & CULTURE': 'ENTERTAINMENT',
+    'CULTURE & ARTS': 'ENTERTAINMENT',
+
+    # Identity / Voices
+    'BLACK VOICES': 'IDENTITY/VOICES',
+    'LATINO VOICES': 'IDENTITY/VOICES',
+    'QUEER VOICES': 'IDENTITY/VOICES',
+    'WOMEN': 'IDENTITY/VOICES',
+    'RELIGION': 'IDENTITY/VOICES',
+
+    # Parenting
+    'PARENTING': 'PARENTING',
+    'PARENTS': 'PARENTING',
+
+    # Style / Beauty
+    'STYLE': 'STYLE/BEAUTY',
+    'STYLE & BEAUTY': 'STYLE/BEAUTY',
+
+    # Travel
+    'TRAVEL': 'TRAVEL',
+
+    # Food / Drink
+    'FOOD & DRINK': 'FOOD & DRINK',
+    'TASTE': 'FOOD & DRINK',
+
+    # Business
+    'BUSINESS': 'BUSINESS',
+    'MONEY': 'BUSINESS',
+
+    # World / Global news
+    'WORLD NEWS': 'WORLD NEWS/GLOBAL',
+    'WORLDPOST': 'WORLD NEWS/GLOBAL',
+    'U.S. NEWS': 'WORLD NEWS/GLOBAL',
+    'THE WORLDPOST': 'WORLD NEWS/GLOBAL',
+
+    # Sports
+    'SPORTS': 'SPORTS',
+
+
+    # Lifestyle
+    'HOME & LIVING': 'LIFESTYLE',
+    'WEDDINGS': 'LIFESTYLE',
+    'DIVORCE': 'LIFESTYLE',
+    'FIFTY': 'LIFESTYLE',
+
+    # Education
+    'EDUCATION': 'EDUCATION',
+    'COLLEGE': 'EDUCATION',
+
+    # Environment
+    'ENVIRONMENT': 'ENVIRONMENT',
+    'GREEN': 'ENVIRONMENT',
+
+    # Tech & Media
+    'TECH': 'TECH',
+    'SCIENCE': 'TECH',
+    'MEDIA': 'TECH'
+
+}
+
+# Apply mapping
+df_cleaned['category_merged'] = df_cleaned['category'].map(lambda x: merge_map.get(x, x))
+
+# -------------------
+# Report merged category counts
+# -------------------
+print("\nMerged category counts:")
+print(df_cleaned['category_merged'].value_counts().sort_values(ascending=False))
+
+# -------------------
+# Save merged dataset
+# -------------------
+df_cleaned.to_csv(MERGED_CSV, index=False)
+print(f"\nMerged dataset saved to: {MERGED_CSV}")
